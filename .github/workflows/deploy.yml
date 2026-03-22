@@ -1,0 +1,35 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /var/www/github-actions-demo || mkdir -p /var/www/github-actions-demo && cd /var/www/github-actions-demo
+
+            if [ ! -d ".git" ]; then
+              git clone https://github.com/YOUR_USERNAME/github-actions-demo.git .
+            else
+              git pull origin main
+            fi
+
+            npm install
+
+            pm2 delete app || true
+            pm2 start server.js --name app
+            pm2 save
