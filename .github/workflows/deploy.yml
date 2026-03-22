@@ -23,7 +23,7 @@ jobs:
             cd /var/www/github-actions-demo || mkdir -p /var/www/github-actions-demo && cd /var/www/github-actions-demo
 
             if [ ! -d ".git" ]; then
-              git clone https://github.com/YOUR_USERNAME/github-actions-demo.git .
+              git clone https://github.com/Iamzohaibali/github-actions-demo1.git .
             else
               git pull origin main
             fi
